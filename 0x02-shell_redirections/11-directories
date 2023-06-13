@@ -1,2 +1,2 @@
 #!/bin/bash
-find . -type d -not -nane | wc -l
+find . -type d -not -name '.' | wc -l
