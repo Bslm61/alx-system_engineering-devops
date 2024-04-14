@@ -1,16 +1,23 @@
 #!/usr/bin/python3
-"""Function to query subscribers on a given Reddit subreddit."""
+""" Script to obtain subscriber count from a subreddit """
+
 import requests
 
-
 def number_of_subscribers(subreddit):
-    """Return the total number of subscribers on a given subreddit."""
-    url = "https://www.reddit.com/r/{}/about.json".format(subreddit)
-    headers = {
-        "User-Agent": "underscoDe@alx-holbertonschool"
-    }
-    response = requests.get(url, headers=headers, allow_redirects=False)
-    if response.status_code == 404:
-        return 0
-    results = response.json().get("data")
-    return results.get("subscribers")
+    """ Function to get subscriber count """
+    if subreddit and isinstance(subreddit, str):
+        subscribers = 0
+        url = f"https://reddit.com/r/{subreddit}/about.json"
+        headers = {'user-agent': 'my-app/0.0.1'}
+        try:
+            req = requests.get(url, headers=headers)
+            req.raise_for_status()  # Raise an exception for 4XX and 5XX status codes
+            data = req.json()
+            subscribers = data.get('data', {}).get('subscribers', 0)
+        except requests.exceptions.RequestException as e:
+            print(f"Error fetching data: {e}")
+        return subscribers
+
+# Example usage:
+# subreddit = 'learnpython'
+# print(number_of_subscribers(subreddit))
